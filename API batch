@@ -1,4 +1,4 @@
-
+ ID 3235163901
 # Batch API
 
 Learn how to use OpenAI's Batch API to send asynchronous groups of requests with 50% lower costs, a separate pool of significantly higher rate limits, and a clear 24-hour turnaround time. The service is ideal for processing jobs that don't require immediate responses. You can also [explore the API reference directly here](/docs/api-reference/batch).
