@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List with Categories</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background: #f9f9f9; }
+    #todo-form, #category-form { margin-bottom: 20px; }
+    .category-select { margin-right: 10px; }
+    .task-list { list-style: none; padding: 0; }
+    .task-item { padding: 10px; margin-bottom: 5px; background: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;}
+    .completed { text-decoration: line-through; color: #888; }
+    .category-label { font-size: 0.9em; color: #0077cc; }
+    .btn { margin-left: 5px; }
+    .delete { color: #c00; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>To-Do List <small>with Categories</small></h1>
+  
+  <form id="category-form">
+    <input type="text" id="category-input" placeholder="Add new category" required>
+    <button type="submit">Add Category</button>
+  </form>
+  
+  <form id="todo-form">
+    <input type="text" id="task-input" placeholder="Add new task" required>
+    <select id="category-select" class="category-select"></select>
+    <button type="submit">Add Task</button>
+  </form>
+  
+  <ul id="task-list" class="task-list"></ul>
+  
+  <script>
+    // Local Storage Keys
+    const TASKS_KEY = 'todoTasks';
+    const CATEGORIES_KEY = 'todoCategories';
+
+    // App Data
+    let tasks = JSON.parse(localStorage.getItem(TASKS_KEY)) || [];
+    let categories = JSON.parse(localStorage.getItem(CATEGORIES_KEY)) || ['General'];
+
+    // Elements
+    const taskInput = document.getElementById('task-input');
+    const categoryInput = document.getElementById('category-input');
+    const categorySelect = document.getElementById('category-select');
+    const taskList = document.getElementById('task-list');
+    const todoForm = document.getElementById('todo-form');
+    const categoryForm = document.getElementById('category-form');
+
+    // Initialize category dropdown
+    function renderCategories() {
+      categorySelect.innerHTML = '';
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        categorySelect.appendChild(option);
+      });
+      localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+    }
+
+    // Render Tasks
+    function renderTasks() {
+      taskList.innerHTML = '';
+      tasks.forEach((task, idx) => {
+        const li = document.createElement('li');
+        li.className = 'task-item';
+        li.innerHTML = `
+          <span class="${task.completed ? 'completed' : ''}">
+            ${task.text} <span class="category-label">[${task.category}]</span>
+          </span>
+          <span>
+            <button class="btn" onclick="editTask(${idx})">Edit</button>
+            <button class="btn" onclick="toggleComplete(${idx})">${task.completed ? 'Undo' : 'Complete'}</button>
+            <span class="delete" onclick="deleteTask(${idx})">&#10060;</span>
+          </span>
+        `;
+        taskList.appendChild(li);
+      });
+      localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+    }
+
+    // Add Task
+    todoForm.onsubmit = function(e) {
+      e.preventDefault();
+      const text = taskInput.value.trim();
+      const category = categorySelect.value;
+      if (!text) return;
+      tasks.push({ text, category, completed: false });
+      taskInput.value = '';
+      renderTasks();
+    };
+
+    // Add Category
+    categoryForm.onsubmit = function(e) {
+      e.preventDefault();
+      const newCat = categoryInput.value.trim();
+      if (newCat && !categories.includes(newCat)) {
+        categories.push(newCat);
+        renderCategories();
+      }
+      categoryInput.value = '';
+    };
+
+    // Expose these functions to HTML
+    window.deleteTask = function(idx) {
+      tasks.splice(idx, 1);
+      renderTasks();
+    };
+
+    window.toggleComplete = function(idx) {
+      tasks[idx].completed = !tasks[idx].completed;
+      renderTasks();
+    };
+
+    window.editTask = function(idx) {
+      const newTask = prompt('Edit task:', tasks[idx].text);
+      if (newTask !== null && newTask.trim() !== '') {
+        tasks[idx].text = newTask.trim();
+        renderTasks();
+      }
+    };
+
+    // On load
+    renderCategories();
+    renderTasks();
+  </script>
+</body>
+</html>
