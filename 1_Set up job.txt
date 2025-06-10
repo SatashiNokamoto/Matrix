@@ -1,0 +1,50 @@
+﻿2025-06-01T03:50:25.4105103Z Current runner version: '2.324.0'
+2025-06-01T03:50:25.4133071Z ##[group]Runner Image Provisioner
+2025-06-01T03:50:25.4134050Z Hosted Compute Agent
+2025-06-01T03:50:25.4134601Z Version: 20250508.323
+2025-06-01T03:50:25.4135193Z Commit: 81b259f29879f73b4213d199e42d8c3465dae986
+2025-06-01T03:50:25.4135924Z Build Date: 2025-05-08T19:40:08Z
+2025-06-01T03:50:25.4136492Z ##[endgroup]
+2025-06-01T03:50:25.4137045Z ##[group]Operating System
+2025-06-01T03:50:25.4137561Z Ubuntu
+2025-06-01T03:50:25.4138108Z 24.04.2
+2025-06-01T03:50:25.4138536Z LTS
+2025-06-01T03:50:25.4138970Z ##[endgroup]
+2025-06-01T03:50:25.4139487Z ##[group]Runner Image
+2025-06-01T03:50:25.4140062Z Image: ubuntu-24.04
+2025-06-01T03:50:25.4140530Z Version: 20250511.1.0
+2025-06-01T03:50:25.4141876Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250511.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-06-01T03:50:25.4143268Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250511.1
+2025-06-01T03:50:25.4144489Z ##[endgroup]
+2025-06-01T03:50:25.4146935Z ##[group]GITHUB_TOKEN Permissions
+2025-06-01T03:50:25.4149208Z Actions: write
+2025-06-01T03:50:25.4149742Z Attestations: write
+2025-06-01T03:50:25.4150262Z Checks: write
+2025-06-01T03:50:25.4150761Z Contents: write
+2025-06-01T03:50:25.4151483Z Deployments: write
+2025-06-01T03:50:25.4152058Z Discussions: write
+2025-06-01T03:50:25.4152577Z Issues: write
+2025-06-01T03:50:25.4153090Z Metadata: read
+2025-06-01T03:50:25.4153541Z Models: read
+2025-06-01T03:50:25.4154067Z Packages: write
+2025-06-01T03:50:25.4154549Z Pages: write
+2025-06-01T03:50:25.4155032Z PullRequests: write
+2025-06-01T03:50:25.4155544Z RepositoryProjects: write
+2025-06-01T03:50:25.4156171Z SecurityEvents: write
+2025-06-01T03:50:25.4156880Z Statuses: write
+2025-06-01T03:50:25.4157337Z ##[endgroup]
+2025-06-01T03:50:25.4159603Z Secret source: Actions
+2025-06-01T03:50:25.4160312Z Prepare workflow directory
+2025-06-01T03:50:25.4632363Z Prepare all required actions
+2025-06-01T03:50:25.4689578Z Getting action download info
+2025-06-01T03:50:25.8049495Z ##[group]Download immutable action package 'actions/download-artifact@v4'
+2025-06-01T03:50:25.8050806Z Version: 4.3.0
+2025-06-01T03:50:25.8052400Z Digest: sha256:552a5b9ad918f62ec0c2e8f42f3c694d4ebd1b4036b18c39b14168fcdfc0e4f2
+2025-06-01T03:50:25.8053805Z Source commit SHA: d3f86a106a0bac45b974a628896c90dbdf5c8093
+2025-06-01T03:50:25.8054561Z ##[endgroup]
+2025-06-01T03:50:26.0799291Z ##[group]Download immutable action package 'actions/github-script@v7'
+2025-06-01T03:50:26.0800236Z Version: 7.0.1
+2025-06-01T03:50:26.0801088Z Digest: sha256:bce02966afe3a75123f766b765abe432fac5464b74976015dc06b811ac9054c7
+2025-06-01T03:50:26.0802405Z Source commit SHA: 60a0d83039c74a4aee543508d2ffcb1c3799cdea
+2025-06-01T03:50:26.0803162Z ##[endgroup]
+2025-06-01T03:50:26.3705618Z Complete job name: create release

@@ -1,0 +1,151 @@
+﻿2025-06-01T03:50:30.1989114Z ##[group]Run actions/github-script@v7
+2025-06-01T03:50:30.1989825Z with:
+2025-06-01T03:50:30.1990848Z   github-token: ***
+2025-06-01T03:50:30.1995244Z   script: const fs = require('fs').promises;
+const { repo: { owner, repo }, sha } = context;
+
+console.log('environment', process.versions);
+console.log({ owner, repo, sha });
+
+const release = await github.rest.repos.createRelease({
+  owner, repo,
+  // if GITHUB_REF just appears to be a branch, use tag-{commit} as the tag
+  tag_name: process.env.GITHUB_REF.includes("refs/heads/") ? "tag-" + sha : process.env.GITHUB_REF.split("/").pop(),
+  target_commitish: sha
+});
+
+console.log('created release', { release });
+
+for (let file of await fs.readdir('dist')) {
+  console.log('uploading', file);
+
+  await github.rest.repos.uploadReleaseAsset({
+    owner, repo,
+    release_id: release.data.id,
+    name: file,
+    data: await fs.readFile(`./dist/${file}`)
+  });
+}
+
+2025-06-01T03:50:30.1999377Z   debug: false
+2025-06-01T03:50:30.1999781Z   user-agent: actions/github-script
+2025-06-01T03:50:30.2000289Z   result-encoding: json
+2025-06-01T03:50:30.2000667Z   retries: 0
+2025-06-01T03:50:30.2001060Z   retry-exempt-status-codes: 400,401,403,404,422
+2025-06-01T03:50:30.2001689Z ##[endgroup]
+2025-06-01T03:50:30.2863292Z environment {
+2025-06-01T03:50:30.2863977Z   node: '20.19.1',
+2025-06-01T03:50:30.2864396Z   acorn: '8.14.0',
+2025-06-01T03:50:30.2864797Z   ada: '2.9.2',
+2025-06-01T03:50:30.2865175Z   ares: '1.34.5',
+2025-06-01T03:50:30.2865565Z   brotli: '1.1.0',
+2025-06-01T03:50:30.2865970Z   cjs_module_lexer: '1.4.1',
+2025-06-01T03:50:30.2866418Z   cldr: '46.0',
+2025-06-01T03:50:30.2866797Z   icu: '76.1',
+2025-06-01T03:50:30.2867279Z   llhttp: '8.1.2',
+2025-06-01T03:50:30.2867897Z   modules: '115',
+2025-06-01T03:50:30.2868502Z   napi: '9',
+2025-06-01T03:50:30.2868934Z   nghttp2: '1.61.0',
+2025-06-01T03:50:30.2869348Z   nghttp3: '0.7.0',
+2025-06-01T03:50:30.2869739Z   ngtcp2: '1.1.0',
+2025-06-01T03:50:30.2870217Z   openssl: '3.0.15+quic',
+2025-06-01T03:50:30.2870636Z   simdutf: '6.0.3',
+2025-06-01T03:50:30.2871030Z   tz: '2025a',
+2025-06-01T03:50:30.2871649Z   undici: '6.21.2',
+2025-06-01T03:50:30.2872037Z   unicode: '16.0',
+2025-06-01T03:50:30.2872420Z   uv: '1.46.0',
+2025-06-01T03:50:30.2872797Z   uvwasi: '0.0.21',
+2025-06-01T03:50:30.2873188Z   v8: '11.3.244.8-node.26',
+2025-06-01T03:50:30.2873619Z   zlib: '1.3.0.1-motley-82a5fec'
+2025-06-01T03:50:30.2874070Z }
+2025-06-01T03:50:30.2874450Z {
+2025-06-01T03:50:30.2874809Z   owner: 'mypyc',
+2025-06-01T03:50:30.2875203Z   repo: 'mypy_mypyc-wheels',
+2025-06-01T03:50:30.2875651Z   sha: 'c580a684254e81fe7c286daac7c96be68f52a94c'
+2025-06-01T03:50:30.2876112Z }
+2025-06-01T03:50:30.8925273Z created release {
+2025-06-01T03:50:30.8926036Z   release: {
+2025-06-01T03:50:30.8926628Z     status: 201,
+2025-06-01T03:50:30.8927513Z     url: 'https://api.github.com/repos/mypyc/mypy_mypyc-wheels/releases',
+2025-06-01T03:50:30.8928450Z     headers: {
+2025-06-01T03:50:30.8929477Z       'access-control-allow-origin': '*',
+2025-06-01T03:50:30.8932307Z       'access-control-expose-headers': 'ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset',
+2025-06-01T03:50:30.8934773Z       'cache-control': 'private, max-age=60, s-maxage=60',
+2025-06-01T03:50:30.8935546Z       'content-length': '2100',
+2025-06-01T03:50:30.8936267Z       'content-security-policy': "default-src 'none'",
+2025-06-01T03:50:30.8937041Z       'content-type': 'application/json; charset=utf-8',
+2025-06-01T03:50:30.8937602Z       date: 'Sun, 01 Jun 2025 03:50:30 GMT',
+2025-06-01T03:50:30.8938240Z       etag: '"2fe1b9476483c639e8e5db3a8132740b788f35e6d2a2dd1cc1ad86fb2b4ea595"',
+2025-06-01T03:50:30.8938983Z       location: 'https://api.github.com/repos/mypyc/mypy_mypyc-wheels/releases/222256340',
+2025-06-01T03:50:30.8939738Z       'referrer-policy': 'origin-when-cross-origin, strict-origin-when-cross-origin',
+2025-06-01T03:50:30.8940636Z       server: 'github.com',
+2025-06-01T03:50:30.8941440Z       'strict-transport-security': 'max-age=31536000; includeSubdomains; preload',
+2025-06-01T03:50:30.8942342Z       vary: 'Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With',
+2025-06-01T03:50:30.8943616Z       'x-accepted-github-permissions': 'contents=write; contents=write,workflows=write',
+2025-06-01T03:50:30.8944236Z       'x-content-type-options': 'nosniff',
+2025-06-01T03:50:30.8944788Z       'x-frame-options': 'deny',
+2025-06-01T03:50:30.8945660Z       'x-github-api-version-selected': '2022-11-28',
+2025-06-01T03:50:30.8946405Z       'x-github-media-type': 'github.v3; format=json',
+2025-06-01T03:50:30.8947243Z       'x-github-request-id': '07C2:37F741:189D43:302A07:683BCE06',
+2025-06-01T03:50:30.8948175Z       'x-ratelimit-limit': '5000',
+2025-06-01T03:50:30.8948844Z       'x-ratelimit-remaining': '4932',
+2025-06-01T03:50:30.8949394Z       'x-ratelimit-reset': '1748752188',
+2025-06-01T03:50:30.8949847Z       'x-ratelimit-resource': 'core',
+2025-06-01T03:50:30.8950336Z       'x-ratelimit-used': '68',
+2025-06-01T03:50:30.8950806Z       'x-xss-protection': '0'
+2025-06-01T03:50:30.8951398Z     },
+2025-06-01T03:50:30.8951731Z     data: {
+2025-06-01T03:50:30.8952223Z       url: 'https://api.github.com/repos/mypyc/mypy_mypyc-wheels/releases/222256340',
+2025-06-01T03:50:30.8953580Z       assets_url: 'https://api.github.com/repos/mypyc/mypy_mypyc-wheels/releases/222256340/assets',
+2025-06-01T03:50:30.8955097Z       upload_url: 'https://uploads.github.com/repos/mypyc/mypy_mypyc-wheels/releases/222256340/assets{?name,label}',
+2025-06-01T03:50:30.8956725Z       html_url: 'https://github.com/mypyc/mypy_mypyc-wheels/releases/tag/v1.17.0%2Bdev.5fbfff97f2197b38321363f4d294f47009a28139',
+2025-06-01T03:50:30.8957452Z       id: 222256340,
+2025-06-01T03:50:30.8957825Z       author: [Object],
+2025-06-01T03:50:30.8958236Z       node_id: 'RE_kwDOCRay-c4NP1zU',
+2025-06-01T03:50:30.8958794Z       tag_name: 'v1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139',
+2025-06-01T03:50:30.8959415Z       target_commitish: 'c580a684254e81fe7c286daac7c96be68f52a94c',
+2025-06-01T03:50:30.8959923Z       name: null,
+2025-06-01T03:50:30.8960296Z       draft: false,
+2025-06-01T03:50:30.8960678Z       prerelease: false,
+2025-06-01T03:50:30.8961079Z       created_at: '2025-06-01T01:30:51Z',
+2025-06-01T03:50:30.8961827Z       published_at: '2025-06-01T03:50:30Z',
+2025-06-01T03:50:30.8962248Z       assets: [],
+2025-06-01T03:50:30.8962949Z       tarball_url: 'https://api.github.com/repos/mypyc/mypy_mypyc-wheels/tarball/v1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139',
+2025-06-01T03:50:30.8964006Z       zipball_url: 'https://api.github.com/repos/mypyc/mypy_mypyc-wheels/zipball/v1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139',
+2025-06-01T03:50:30.8964722Z       body: null
+2025-06-01T03:50:30.8965077Z     }
+2025-06-01T03:50:30.8965658Z   }
+2025-06-01T03:50:30.8965982Z }
+2025-06-01T03:50:30.8966391Z uploading mypy-1.17.0+dev-py3-none-any.whl
+2025-06-01T03:50:31.4774815Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-emscripten_3_1_14_wasm32.whl
+2025-06-01T03:50:32.1528177Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-macosx_10_9_x86_64.whl
+2025-06-01T03:50:32.8488762Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-macosx_11_0_arm64.whl
+2025-06-01T03:50:33.6456982Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_28_aarch64.whl
+2025-06-01T03:50:34.5647245Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl
+2025-06-01T03:50:35.3699733Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-musllinux_1_2_x86_64.whl
+2025-06-01T03:50:36.0543185Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp310-cp310-win_amd64.whl
+2025-06-01T03:50:36.8567965Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp311-cp311-macosx_10_9_x86_64.whl
+2025-06-01T03:50:37.5893322Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp311-cp311-macosx_11_0_arm64.whl
+2025-06-01T03:50:38.3540529Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_28_aarch64.whl
+2025-06-01T03:50:39.0311614Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl
+2025-06-01T03:50:39.8378968Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp311-cp311-musllinux_1_2_x86_64.whl
+2025-06-01T03:50:40.6381627Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp311-cp311-win_amd64.whl
+2025-06-01T03:50:41.4238697Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp312-cp312-macosx_10_13_x86_64.whl
+2025-06-01T03:50:42.2832805Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp312-cp312-macosx_11_0_arm64.whl
+2025-06-01T03:50:42.9983326Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_28_aarch64.whl
+2025-06-01T03:50:43.7212162Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl
+2025-06-01T03:50:44.6383009Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp312-cp312-musllinux_1_2_x86_64.whl
+2025-06-01T03:50:45.5063079Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp312-cp312-win_amd64.whl
+2025-06-01T03:50:46.1023200Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp313-cp313-macosx_10_13_x86_64.whl
+2025-06-01T03:50:46.8187826Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp313-cp313-macosx_11_0_arm64.whl
+2025-06-01T03:50:47.6316181Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_28_aarch64.whl
+2025-06-01T03:50:48.4714704Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl
+2025-06-01T03:50:49.2845100Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp313-cp313-musllinux_1_2_x86_64.whl
+2025-06-01T03:50:50.0967191Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp313-cp313-win_amd64.whl
+2025-06-01T03:50:50.7913302Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp39-cp39-macosx_10_9_x86_64.whl
+2025-06-01T03:50:51.4813171Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp39-cp39-macosx_11_0_arm64.whl
+2025-06-01T03:50:52.2945686Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_28_aarch64.whl
+2025-06-01T03:50:52.9568479Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl
+2025-06-01T03:50:53.7783396Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp39-cp39-musllinux_1_2_x86_64.whl
+2025-06-01T03:50:54.6450097Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139-cp39-cp39-win_amd64.whl
+2025-06-01T03:50:55.5069242Z uploading mypy-1.17.0+dev.5fbfff97f2197b38321363f4d294f47009a28139.tar.gz
